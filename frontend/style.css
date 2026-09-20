@@ -811,3 +811,379 @@ h2 {
         margin: 16px;
     }
 }
+
+/* ===========================================================================
+   批量分享：多选、批量策略弹窗、逐条结果、记录编辑
+   =========================================================================== */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.section-header h2 {
+    margin-bottom: 0;
+}
+
+.batch-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: 1px solid var(--accent);
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.batch-share-btn:hover:not(:disabled) {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+}
+
+.batch-share-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.batch-share-btn.hidden {
+    display: none;
+}
+
+.file-select {
+    display: flex;
+    align-items: center;
+    padding-right: 4px;
+    cursor: pointer;
+}
+
+.file-select input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.file-item.selected {
+    border-color: var(--accent);
+    background: rgba(59, 130, 246, 0.08);
+}
+
+/* 大弹窗（批量配置 / 批量结果） */
+.modal-large .modal-content {
+    max-width: 640px;
+    max-height: 88vh;
+    overflow-y: auto;
+}
+
+.batch-subtitle {
+    margin-bottom: 20px;
+}
+
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-group-inline label:first-child {
+    margin-bottom: 0;
+}
+
+.modal-content input[type="number"] {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.modal-content input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* 启停开关 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.switch-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked + .switch-slider {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.switch input:checked + .switch-slider::before {
+    transform: translateX(20px);
+}
+
+/* 批量弹窗内文件清单 */
+.batch-file-list {
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.batch-file-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.batch-file-row:last-child {
+    border-bottom: none;
+}
+
+.batch-file-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.batch-file-icon {
+    font-size: 1.1rem;
+}
+
+.batch-file-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.batch-file-size {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.batch-item-note {
+    flex-shrink: 0;
+    width: 220px;
+    padding: 8px 12px !important;
+    margin-bottom: 0 !important;
+    font-size: 0.8125rem !important;
+    border-radius: 8px !important;
+}
+
+/* 批量结果 */
+.batch-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0 20px;
+}
+
+.summary-pill {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+}
+
+.summary-total { background: rgba(255,255,255,0.06); }
+.summary-success { background: rgba(34,197,94,0.12); color: var(--success); border-color: rgba(34,197,94,0.3); }
+.summary-failed { background: rgba(239,68,68,0.12); color: var(--error); border-color: rgba(239,68,68,0.3); }
+.summary-retry { background: rgba(245,158,11,0.12); color: #f59e0b; border-color: rgba(245,158,11,0.3); }
+.summary-rehit { background: rgba(59,130,246,0.12); color: var(--accent); border-color: rgba(59,130,246,0.3); }
+
+.batch-result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.batch-result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+}
+
+.batch-result-row.is-ok { border-left: 3px solid var(--success); }
+.batch-result-row.is-fail { border-left: 3px solid var(--error); }
+
+.batch-result-main {
+    min-width: 0;
+    flex: 1;
+}
+
+.batch-result-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.batch-result-detail {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.batch-result-detail.error-text {
+    color: var(--error);
+}
+
+.batch-result-detail em {
+    color: #f59e0b;
+    font-style: normal;
+    font-size: 0.75rem;
+}
+
+.result-tag {
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.tag-success { background: rgba(34,197,94,0.15); color: var(--success); }
+.tag-fail { background: rgba(239,68,68,0.15); color: var(--error); }
+.tag-retry { background: rgba(245,158,11,0.15); color: #f59e0b; }
+
+.batch-result-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.batch-result-link {
+    font-size: 0.8125rem;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.batch-result-link:hover {
+    text-decoration: underline;
+}
+
+.copy-link-btn.small {
+    flex: none;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+}
+
+/* 分享记录：备注、停用态、启停/编辑按钮 */
+.share-item.is-disabled {
+    opacity: 0.6;
+}
+
+.share-item-note {
+    font-size: 0.8125rem;
+    color: #d8b4fe;
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+    word-break: break-all;
+}
+
+.toggle-share-btn,
+.edit-share-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-primary);
+}
+
+.toggle-share-btn:hover {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: #f59e0b;
+    color: #f59e0b;
+}
+
+.edit-share-btn:hover {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+@media (max-width: 640px) {
+    .batch-file-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .batch-item-note {
+        width: 100%;
+    }
+
+    .batch-result-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .share-item-actions {
+        flex-wrap: wrap;
+    }
+}

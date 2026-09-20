@@ -44,7 +44,12 @@
 
         <!-- 文件列表 -->
         <div class="file-list-section">
-            <h2>文件库</h2>
+            <div class="section-header">
+                <h2>文件库</h2>
+                <button id="batchShareBtn" class="batch-share-btn hidden" onclick="openBatchShareModal()">
+                    📤 批量设置分享策略（<span id="selectedCount">0</span>）
+                </button>
+            </div>
             <div id="fileList" class="file-list"></div>
         </div>
 
@@ -123,7 +128,7 @@
             <div class="modal-content">
                 <h2>分享链接已生成</h2>
                 <p>您可以将以下链接分享给他人</p>
-                
+
                 <div class="share-link-box">
                     <input type="text" id="shareLinkInput" readonly>
                     <button class="copy-btn" onclick="copyShareLink()">
@@ -134,7 +139,7 @@
                         <span id="copyBtnText">复制</span>
                     </button>
                 </div>
-                
+
                 <div class="share-info">
                     <div class="info-item">
                         <span class="info-label">文件名称</span>
@@ -149,10 +154,109 @@
                         <span id="shareInfoDownloads" class="info-value"></span>
                     </div>
                 </div>
-                
+
                 <div class="modal-buttons">
                     <button type="button" class="btn-secondary" onclick="closeShareSuccessModal()">关闭</button>
                     <button type="button" class="btn-primary" onclick="copyShareLink()">复制链接</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 批量分享策略弹窗 -->
+        <div id="batchShareModal" class="modal modal-large">
+            <div class="modal-content">
+                <h2>批量设置分享策略</h2>
+                <p class="batch-subtitle">将对已选择的 <strong id="batchFileCount">0</strong> 个文件统一应用以下生命周期策略，提交后逐条返回结果。</p>
+
+                <div class="form-group">
+                    <label>有效期（小时）</label>
+                    <select id="batchExpireHours">
+                        <option value="1">1 小时</option>
+                        <option value="6">6 小时</option>
+                        <option value="24" selected>24 小时</option>
+                        <option value="72">3 天</option>
+                        <option value="168">7 天</option>
+                        <option value="-1">永久有效</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>取件次数上限</label>
+                    <select id="batchMaxDownloads">
+                        <option value="1">1 次</option>
+                        <option value="3">3 次</option>
+                        <option value="5">5 次</option>
+                        <option value="10" selected>10 次</option>
+                        <option value="100">100 次</option>
+                        <option value="-1">无限制</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>统一备注（可选，可在下方列表逐条覆盖）</label>
+                    <input type="text" id="batchNote" maxlength="200" placeholder="例如：项目资料-2026秋">
+                </div>
+
+                <div class="form-group form-group-inline">
+                    <label for="batchActive">创建后立即启用</label>
+                    <label class="switch">
+                        <input type="checkbox" id="batchActive" checked>
+                        <span class="switch-slider"></span>
+                    </label>
+                </div>
+
+                <div class="batch-file-list" id="batchFileList"></div>
+                <div id="batchShareError" class="error-msg"></div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeBatchShareModal()">取消</button>
+                    <button type="button" class="btn-primary" id="batchSubmitBtn" onclick="confirmBatchShare()">提交批量策略</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 批量结果弹窗 -->
+        <div id="batchResultModal" class="modal modal-large">
+            <div class="modal-content">
+                <h2>批量处理结果</h2>
+                <div id="batchResultSummary" class="batch-summary"></div>
+                <div class="batch-result-list" id="batchResultList"></div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" id="batchResultCloseBtn" onclick="closeBatchResultModal()">关闭</button>
+                    <button type="button" class="btn-primary" id="batchRetryBtn" onclick="retryFailedBatchItems()">仅重试可重试项（<span id="batchRetryCount">0</span>）</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分享记录编辑弹窗（备注/启停，局部更新） -->
+        <div id="shareEditModal" class="modal">
+            <div class="modal-content">
+                <h2>编辑分享策略</h2>
+                <p id="shareEditFileName" class="batch-subtitle"></p>
+
+                <div class="form-group">
+                    <label>有效期（小时，留空不修改，-1 为永久）</label>
+                    <input type="number" id="editExpireHours" min="-1" step="1" placeholder="不修改">
+                </div>
+                <div class="form-group">
+                    <label>取件次数上限（-1 为不限）</label>
+                    <input type="number" id="editMaxDownloads" min="-1" step="1">
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <input type="text" id="editNote" maxlength="200">
+                </div>
+                <div class="form-group form-group-inline">
+                    <label for="editActive">启用该分享链接</label>
+                    <label class="switch">
+                        <input type="checkbox" id="editActive">
+                        <span class="switch-slider"></span>
+                    </label>
+                </div>
+                <div id="shareEditError" class="error-msg"></div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeShareEditModal()">取消</button>
+                    <button type="button" class="btn-primary" onclick="confirmShareEdit()">保存</button>
                 </div>
             </div>
         </div>
