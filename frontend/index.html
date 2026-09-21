@@ -44,7 +44,19 @@
 
         <!-- 文件列表 -->
         <div class="file-list-section">
-            <h2>文件库</h2>
+            <div class="section-header">
+                <h2>文件库</h2>
+                <button id="batchShareBtn" class="batch-share-btn" type="button" disabled>
+                    批量分享 <span id="selectedFileCount">0</span>
+                </button>
+            </div>
+            <div id="batchSelectBar" class="batch-select-bar hidden">
+                <label class="select-all-control">
+                    <input type="checkbox" id="selectAllFiles">
+                    <span>全选</span>
+                </label>
+                <span id="batchSelectHint">选择多个文件后可一次设置分享策略</span>
+            </div>
             <div id="fileList" class="file-list"></div>
         </div>
 
@@ -115,6 +127,77 @@
                     <button type="button" class="btn-primary" onclick="confirmCreateShare()">生成链接</button>
                 </div>
                 <div id="shareError" class="error-msg"></div>
+            </div>
+        </div>
+
+        <!-- 批量分享设置弹窗 -->
+        <div id="batchShareModal" class="modal">
+            <div class="modal-content batch-modal-content">
+                <h2 id="batchModalTitle">批量创建分享链接</h2>
+                <p id="batchSelectedSummary">将为所选文件应用同一条策略</p>
+
+                <div id="batchFilePreview" class="batch-file-preview"></div>
+                <div id="batchPolicyError" class="error-msg"></div>
+
+                <div class="form-group">
+                    <label for="batchExpireHours">有效期（小时）</label>
+                    <select id="batchExpireHours">
+                        <option value="1">1 小时</option>
+                        <option value="6">6 小时</option>
+                        <option value="24" selected>24 小时</option>
+                        <option value="72">3 天</option>
+                        <option value="168">7 天</option>
+                        <option value="-1">永久有效</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="batchMaxDownloads">取件次数上限</label>
+                    <select id="batchMaxDownloads">
+                        <option value="1">1 次</option>
+                        <option value="3">3 次</option>
+                        <option value="5">5 次</option>
+                        <option value="10" selected>10 次</option>
+                        <option value="100">100 次</option>
+                        <option value="-1">无限制</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="batchNote">备注</label>
+                    <textarea id="batchNote" maxlength="500" rows="3" placeholder="可选，用于标识本次批量分享"></textarea>
+                    <div class="field-hint"><span id="batchNoteCount">0</span>/500</div>
+                </div>
+
+                <div class="switch-row">
+                    <div>
+                        <strong>创建后立即启用</strong>
+                        <span>停用状态下访客无法取件</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="batchEnabled" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeBatchShareModal()">取消</button>
+                    <button type="button" id="batchSubmitBtn" class="btn-primary" onclick="submitBatchShare()">提交</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 批量结果弹窗 -->
+        <div id="batchResultModal" class="modal">
+            <div class="modal-content batch-modal-content">
+                <h2>批量分享结果</h2>
+                <div id="batchResultSummary" class="batch-result-summary"></div>
+                <div id="batchResultTrace" class="batch-result-trace"></div>
+                <div id="batchResultList" class="batch-result-list"></div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeBatchResultModal()">关闭</button>
+                    <button type="button" id="batchRetryBtn" class="btn-primary">重试可重试项</button>
+                </div>
             </div>
         </div>
 
